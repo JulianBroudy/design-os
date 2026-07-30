@@ -51,22 +51,25 @@ export interface DataShape {
 // Design System
 // =============================================================================
 
-export interface ColorTokens {
+// Re-export the canonical design system types from the editor module
+export type { DesignSystemTokens, ColorTokens, ColorRole } from '@/features/design-system-editor/types'
+import type { DesignSystemTokens } from '@/features/design-system-editor/types'
+
+/** Legacy format — used only for backward compat in the loader */
+export interface LegacyColorTokens {
   primary: string
   secondary: string
   neutral: string
 }
 
-export interface TypographyTokens {
+/** Legacy format — used only for backward compat in the loader */
+export interface LegacyTypographyTokens {
   heading: string
   body: string
   mono: string
 }
 
-export interface DesignSystem {
-  colors: ColorTokens | null
-  typography: TypographyTokens | null
-}
+export type DesignSystem = DesignSystemTokens
 
 // =============================================================================
 // Application Shell

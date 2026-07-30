@@ -7,6 +7,7 @@ import { SectionPage } from '@/components/SectionPage'
 import { ScreenDesignPage, ScreenDesignFullscreen } from '@/components/ScreenDesignPage'
 import { ShellDesignPage, ShellDesignFullscreen } from '@/components/ShellDesignPage'
 import { ExportPage } from '@/components/ExportPage'
+import { DesignSystemEditorPage } from '@/features/design-system-editor/DesignSystemEditorPage'
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
   {
     path: '/design',
     element: <DesignPage />,
+  },
+  {
+    path: '/design/editor',
+    element: <DesignSystemEditorPage />,
   },
   {
     path: '/sections',

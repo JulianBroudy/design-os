@@ -1,10 +1,8 @@
 # Design Tokens
 
-You are helping the user choose colors and typography for their product. These design tokens will be used consistently across all screen designs and the application shell.
+You are helping the user define the visual design system for their product. This includes colors, typography, border radius, and spacing. These tokens generate a complete shadcn/ui-compatible theme that is applied across all screen designs and the application shell.
 
 ## Step 1: Check Prerequisites
-
-First, verify that the product overview exists:
 
 Read `/product/product-overview.md` to understand what the product is.
 
@@ -14,153 +12,183 @@ If it doesn't exist:
 
 Stop here if the prerequisite is missing.
 
-## Step 2: Explain the Process
+## Step 2: Conversational Discovery
 
-"Let's define the visual identity for **[Product Name]**.
+Ask the user about their visual preferences in a natural, conversational way (1-2 questions at a time):
 
-I'll help you choose:
-1. **Colors** — A primary accent, secondary accent, and neutral palette
-2. **Typography** — Fonts for headings, body text, and code
+**Brand & Vibe:**
+- "What vibe are you going for with **[Product Name]**? Professional, playful, modern, minimal, bold, warm, clinical?"
+- "Any existing brand colors or fonts, or starting fresh?"
+- "Any colors you want to avoid?"
 
-These will be applied consistently across all your screen designs and the application shell.
+**Functional Preferences:**
+- "How much rounding do you want? Sharp corners, subtle rounding, or very rounded (pill-shaped)?"
+- "Dense layout (more content per screen) or spacious (more breathing room)?"
 
-Do you have any existing brand colors or fonts in mind, or would you like suggestions?"
+Don't ask all at once — be conversational. 2-3 exchanges max.
 
-Wait for their response.
+## Step 3: Generate the Design System
 
-## Step 3: Choose Colors
+Based on the conversation, generate a complete `design-system.json` file. Use the Tailwind color palette presets as a starting point, then customize if the user expressed specific preferences.
 
-Help the user select from Tailwind's built-in color palette. Present options based on their product type:
+**File:** `/product/design-system/design-system.json`
 
-"For colors, we'll pick from Tailwind's palette so they work seamlessly with your screen designs.
+The schema uses shadcn/ui-compatible semantic color roles in oklch format, with both light and dark mode values:
 
-**Primary color** (main accent, buttons, links):
-Common choices: `blue`, `indigo`, `violet`, `emerald`, `teal`, `amber`, `rose`, `lime`
-
-**Secondary color** (complementary accent, tags, highlights):
-Should complement your primary — often a different hue or a neutral variation
-
-**Neutral color** (backgrounds, text, borders):
-Options: `slate` (cool gray), `gray` (pure gray), `zinc` (slightly warm), `neutral`, `stone` (warm gray)
-
-Based on [Product Name], I'd suggest:
-- **Primary:** [suggestion] — [why it fits]
-- **Secondary:** [suggestion] — [why it complements]
-- **Neutral:** [suggestion] — [why it works]
-
-What feels right for your product?"
-
-Use AskUserQuestion to gather their preferences if they're unsure:
-
-- "What vibe are you going for? Professional, playful, modern, minimal?"
-- "Any colors you definitely want to avoid?"
-- "Light mode, dark mode, or both?"
-
-## Step 4: Choose Typography
-
-Help the user select Google Fonts:
-
-"For typography, we'll use Google Fonts for easy web integration.
-
-**Heading font** (titles, section headers):
-Popular choices: `DM Sans`, `Inter`, `Poppins`, `Manrope`, `Space Grotesk`, `Outfit`
-
-**Body font** (paragraphs, UI text):
-Often the same as heading, or: `Inter`, `Source Sans 3`, `Nunito Sans`, `Open Sans`
-
-**Mono font** (code, technical content):
-Options: `IBM Plex Mono`, `JetBrains Mono`, `Fira Code`, `Source Code Pro`
-
-My suggestions for [Product Name]:
-- **Heading:** [suggestion] — [why]
-- **Body:** [suggestion] — [why]
-- **Mono:** [suggestion] — [why]
-
-What do you prefer?"
-
-## Step 5: Present Final Choices
-
-Once they've made decisions:
-
-"Here's your design system:
-
-**Colors:**
-- Primary: `[color]`
-- Secondary: `[color]`
-- Neutral: `[color]`
-
-**Typography:**
-- Heading: [Font Name]
-- Body: [Font Name]
-- Mono: [Font Name]
-
-Does this look good? Ready to save it?"
-
-## Step 6: Create the Files
-
-Once approved, create two files:
-
-**File 1:** `/product/design-system/colors.json`
 ```json
 {
-  "primary": "[color]",
-  "secondary": "[color]",
-  "neutral": "[color]"
+  "colors": {
+    "light": {
+      "background": "oklch(...)",
+      "foreground": "oklch(...)",
+      "card": "oklch(...)",
+      "card-foreground": "oklch(...)",
+      "popover": "oklch(...)",
+      "popover-foreground": "oklch(...)",
+      "primary": "oklch(...)",
+      "primary-foreground": "oklch(...)",
+      "secondary": "oklch(...)",
+      "secondary-foreground": "oklch(...)",
+      "muted": "oklch(...)",
+      "muted-foreground": "oklch(...)",
+      "accent": "oklch(...)",
+      "accent-foreground": "oklch(...)",
+      "destructive": "oklch(...)",
+      "destructive-foreground": "oklch(...)",
+      "border": "oklch(...)",
+      "input": "oklch(...)",
+      "ring": "oklch(...)"
+    },
+    "dark": {
+      "background": "oklch(...)",
+      "foreground": "oklch(...)",
+      "card": "oklch(...)",
+      "card-foreground": "oklch(...)",
+      "popover": "oklch(...)",
+      "popover-foreground": "oklch(...)",
+      "primary": "oklch(...)",
+      "primary-foreground": "oklch(...)",
+      "secondary": "oklch(...)",
+      "secondary-foreground": "oklch(...)",
+      "muted": "oklch(...)",
+      "muted-foreground": "oklch(...)",
+      "accent": "oklch(...)",
+      "accent-foreground": "oklch(...)",
+      "destructive": "oklch(...)",
+      "destructive-foreground": "oklch(...)",
+      "border": "oklch(...)",
+      "input": "oklch(...)",
+      "ring": "oklch(...)"
+    }
+  },
+  "typography": {
+    "sans": "Inter",
+    "serif": "Merriweather",
+    "mono": "JetBrains Mono"
+  },
+  "radius": "0.5rem",
+  "spacing": "comfortable",
+  "preset": "blue"
 }
 ```
 
-**File 2:** `/product/design-system/typography.json`
-```json
-{
-  "heading": "[Font Name]",
-  "body": "[Font Name]",
-  "mono": "[Font Name]"
-}
-```
+### How to Generate Color Values
 
-## Step 7: Confirm Completion
+Use these Tailwind color palettes as a base. The `preset` field records which palette was used.
 
-Let the user know:
+**Strategy for mapping a Tailwind palette to semantic roles:**
 
-"I've saved your design tokens:
-- `/product/design-system/colors.json`
-- `/product/design-system/typography.json`
+**Light mode:**
+- `background`: neutral-50 (very light)
+- `foreground`: neutral-900 (very dark)
+- `card`: white (`oklch(1 0 0)`)
+- `card-foreground`: neutral-900
+- `popover`: white
+- `popover-foreground`: neutral-900
+- `primary`: palette-600 (the main accent)
+- `primary-foreground`: white or neutral-50 (readable on primary)
+- `secondary`: neutral-100
+- `secondary-foreground`: neutral-900
+- `muted`: neutral-100
+- `muted-foreground`: neutral-500
+- `accent`: neutral-100
+- `accent-foreground`: neutral-900
+- `destructive`: rose-600
+- `destructive-foreground`: white
+- `border`: neutral-200
+- `input`: neutral-200
+- `ring`: palette-600
 
-**Your palette:**
-- Primary: `[color]` — for buttons, links, key actions
-- Secondary: `[color]` — for tags, highlights, secondary elements
-- Neutral: `[color]` — for backgrounds, text, borders
+**Dark mode:**
+- `background`: neutral-950
+- `foreground`: neutral-50
+- `card`: neutral-900
+- `card-foreground`: neutral-50
+- `popover`: neutral-900
+- `popover-foreground`: neutral-50
+- `primary`: palette-400 (lighter for dark backgrounds)
+- `primary-foreground`: neutral-950
+- `secondary`: neutral-800
+- `secondary-foreground`: neutral-50
+- `muted`: neutral-800
+- `muted-foreground`: neutral-400
+- `accent`: neutral-800
+- `accent-foreground`: neutral-50
+- `destructive`: rose-400
+- `destructive-foreground`: neutral-950
+- `border`: neutral-700
+- `input`: neutral-700
+- `ring`: palette-400
 
-**Your fonts:**
-- [Heading Font] for headings
-- [Body Font] for body text
-- [Mono Font] for code
+Use `stone` as the neutral palette for warm products, `slate` for cool/professional, `zinc` for neutral.
 
-These will be used when creating screen designs for your sections.
+### Radius Options
+- `0` (none/sharp)
+- `0.25rem` (sm)
+- `0.375rem` (md)
+- `0.5rem` (lg — default)
+- `0.75rem` (xl)
+- `1rem` (2xl)
+- `9999px` (full/pill)
 
-Next step: Run `/design-shell` to design your application's navigation and layout."
+### Spacing Options
+- `compact` — dense information layouts
+- `comfortable` — balanced (default)
+- `spacious` — generous whitespace
 
-## Reference: Tailwind Color Palette
+### Typography
 
-Available colors (each has shades 50-950):
-- **Warm:** `red`, `orange`, `amber`, `yellow`, `lime`
-- **Cool:** `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`
-- **Purple:** `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`
-- **Neutral:** `slate`, `gray`, `zinc`, `neutral`, `stone`
+Choose from popular Google Fonts:
 
-## Reference: Popular Google Font Pairings
+**Sans-Serif:** Inter, DM Sans, Plus Jakarta Sans, Nunito Sans, Poppins, Montserrat, Work Sans, Outfit, Manrope, Space Grotesk, Sora, Figtree, Raleway
+**Serif:** Merriweather, Lora, Playfair Display, Source Serif 4, Libre Baskerville, DM Serif Display, Crimson Pro
+**Monospace:** IBM Plex Mono, JetBrains Mono, Fira Code, Source Code Pro, Roboto Mono, Space Mono, DM Mono
 
-- **Modern & Clean:** DM Sans + DM Sans + IBM Plex Mono
-- **Professional:** Inter + Inter + JetBrains Mono
-- **Friendly:** Nunito Sans + Nunito Sans + Fira Code
-- **Bold & Modern:** Space Grotesk + Inter + Source Code Pro
-- **Editorial:** Playfair Display + Source Sans 3 + IBM Plex Mono
-- **Tech-forward:** JetBrains Mono + Inter + JetBrains Mono
+## Step 4: Confirm and Direct to Visual Editor
+
+After saving the file:
+
+"I've saved your design system to `/product/design-system/design-system.json`.
+
+**Summary:**
+- **Colors:** [preset name] palette — [primary color] for accents, [neutral] for backgrounds
+- **Typography:** [sans font] for headings & body, [mono font] for code
+- **Radius:** [value] — [description]
+- **Spacing:** [value]
+
+You can now **open the visual editor** to see your design system applied to real components and fine-tune any colors, fonts, or settings:
+
+👉 Navigate to **Design System → Open Editor** (or go to `/design/editor` in the browser)
+
+The editor shows a live preview of buttons, cards, forms, tables, and more — all responding to your tokens in real-time. You can adjust individual colors, switch between light/dark mode preview, try different fonts, and more.
+
+When you're happy with the design system, run `/design-shell` to design your application's navigation and layout."
 
 ## Important Notes
 
-- Colors should be Tailwind palette names (not hex codes)
-- Fonts should be exact Google Fonts names
-- Keep suggestions contextual to the product type
-- The mono font is optional but recommended for any product with code/technical content
-- Design tokens apply to screen designs only — the Design OS app keeps its own aesthetic
+- Always generate BOTH light and dark mode values
+- Use oklch format for all colors (e.g., `oklch(0.586 0.253 17.585)`)
+- Ensure foreground colors contrast well with their paired backgrounds
+- Design tokens apply to screen designs only — the Design OS app keeps its own stone/lime aesthetic
+- If the user already has `colors.json`/`typography.json` (legacy format), the system automatically converts them — but generating the new `design-system.json` is preferred
+- Remove old `colors.json` and `typography.json` files when generating the new format

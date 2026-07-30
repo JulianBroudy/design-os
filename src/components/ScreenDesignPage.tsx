@@ -6,6 +6,8 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { loadScreenDesignComponent, sectionUsesShell } from '@/lib/section-loader'
 import { loadAppShell, hasShellComponents, loadShellInfo } from '@/lib/shell-loader'
 import { loadProductData } from '@/lib/product-loader'
+import { loadDesignSystem } from '@/lib/design-system-loader'
+import { applyDesignSystemToDocument } from '@/lib/design-system-css'
 import React from 'react'
 
 const MIN_WIDTH = 320
@@ -296,17 +298,25 @@ export function ScreenDesignFullscreen() {
     })
   }, [sectionId]) // Depends on sectionId to check section-specific shell config
 
-  // Sync theme with parent window
+  // Sync theme with parent window and apply product design tokens
   useEffect(() => {
+    const designSystem = loadDesignSystem()
+
     const applyTheme = () => {
       const theme = localStorage.getItem('theme') || 'system'
       const root = document.documentElement
 
+      let isDark: boolean
       if (theme === 'system') {
-        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        root.classList.toggle('dark', systemDark)
+        isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       } else {
-        root.classList.toggle('dark', theme === 'dark')
+        isDark = theme === 'dark'
+      }
+      root.classList.toggle('dark', isDark)
+
+      // Apply product design tokens if available
+      if (designSystem) {
+        applyDesignSystemToDocument(designSystem, isDark)
       }
     }
 
